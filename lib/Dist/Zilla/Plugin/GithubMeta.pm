@@ -1,9 +1,5 @@
 package Dist::Zilla::Plugin::GithubMeta;
 
-BEGIN {
-    $Dist::Zilla::Plugin::GithubMeta::VERSION = '0.04';
-}
-
 # ABSTRACT: Automatically include GitHub meta information in META.yml
 
 use Moose;
