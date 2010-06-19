@@ -15,11 +15,17 @@ has 'homepage' => (
   coerce => 1,
 );
 
+has remote => (
+    is => 'ro',
+    default => 'origin',
+);
+
 sub metadata {
   my $self = shift;
   return unless _under_git();
   return unless can_run('git');
-  return unless my ($git_url) = `git remote show -n origin` =~ /URL: (.*)$/m;
+  my $origin = $self->remote;
+  return unless my ($git_url) = `git remote show -n $origin` =~ /URL: (.*)$/m;
   return unless $git_url =~ /github\.com/; # Not a Github repository
   my $web_url = $git_url;
   $git_url =~ s![\w\-]+\@([^:]+):!git://$1/!;
@@ -70,6 +76,10 @@ Dist::Zilla::Plugin::GithubMeta - Automatically include GitHub meta information 
   [GithubMeta]
   homepage = http://some.sort.of.url/project/
 
+  # to override the github remote repo (defaults to 'origin')
+  [GithubMeta]
+  remote=github
+
 =head1 DESCRIPTION
 
 Dist::Zilla::Plugin::GithubMeta is a L<Dist::Zilla> plugin to include GitHub L<http://github.com> meta
@@ -77,11 +87,16 @@ information in C<META.yml>.
 
 It automatically detects if the distribution directory is under C<git> version control and whether the 
 C<origin> is a GitHub repository and will set the C<repository> and C<homepage> meta in C<META.yml> to the
-appropriate URLs for GitHub.
+appropriate URLs for GitHub. 
 
 =head2 ATTRIBUTES
 
 =over
+
+=item C<remote>
+
+The GitHub remote repo can be overriden with this attribute. If not
+provided, it defaults to C<origin>.
 
 =item C<homepage>
 
