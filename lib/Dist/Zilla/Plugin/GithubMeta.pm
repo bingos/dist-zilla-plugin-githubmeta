@@ -2,6 +2,8 @@ package Dist::Zilla::Plugin::GithubMeta;
 
 # ABSTRACT: Automatically include GitHub meta information in META.yml
 
+use strict;
+use warnings;
 use Moose;
 with 'Dist::Zilla::Role::MetaProvider';
 
@@ -57,13 +59,9 @@ sub _under_git {
 __PACKAGE__->meta->make_immutable;
 no Moose;
 
-qq[1 is the loneliest number]
+qq[1 is the loneliest number];
 
-__END__
-
-=head1 NAME
-
-Dist::Zilla::Plugin::GithubMeta - Automatically include GitHub meta information in META.yml
+=pod
 
 =head1 SYNOPSIS
 
@@ -88,6 +86,9 @@ information in C<META.yml>.
 It automatically detects if the distribution directory is under C<git> version control and whether the 
 C<origin> is a GitHub repository and will set the C<repository> and C<homepage> meta in C<META.yml> to the
 appropriate URLs for GitHub. 
+
+Based on L<Module::Install::GithubMeta> which was based on 
+L<Module::Install::Repository> by Tatsuhiko Miyagawa
 
 =head2 ATTRIBUTES
 
@@ -114,19 +115,6 @@ understood by L<MooseX::Types::URI>.
 Required by L<Dist::Zilla::Role::MetaProvider>
 
 =back
-
-=head1 AUTHOR
-
-Chris C<BinGOs> Williams
-
-Based on L<Module::Install::GithubMeta> which was based on 
-L<Module::Install::Repository> by Tatsuhiko Miyagawa
-
-=head1 LICENSE
-
-Copyright E<copy> Chris Williams and Tatsuhiko Miyagawa
-
-This module may be used, modified, and distributed under the same terms as Perl itself. Please see the license that came with your Perl distribution for details.
 
 =head1 SEE ALSO
 
