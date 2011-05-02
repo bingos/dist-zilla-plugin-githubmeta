@@ -19,24 +19,48 @@ has 'homepage' => (
   coerce => 1,
 );
 
-has remote => (
-    is => 'ro',
-    default => 'origin',
+has 'remote' => (
+  is  => 'ro',
+  isa => 'ArrayRef[Str]',
+  default => sub {  [ 'origin' ]  },
 );
 
 sub metadata {
   my $self = shift;
   return unless _under_git();
   return unless can_run('git');
-  my $origin = $self->remote;
-  return unless my ($git_url) = `git remote show -n $origin` =~ /URL: (.*)$/m;
-  return unless $git_url =~ /github\.com/; # Not a Github repository
-  my $web_url = $git_url;
-  $git_url =~ s![\w\-]+\@([^:]+):!git://$1/!;
-  $web_url =~ s![\w\-]+\@([^:]+):!http://$1/!;
-  $web_url =~ s!\.git$!/tree!;
-  my $home_url = $self->homepage ? $self->homepage->as_string : $web_url;
-  return { resources => { repository => { url => $git_url, type => 'git', web => $web_url }, homepage => $home_url } };
+
+  my $git_url;
+  for my $remote (@{ $self->remote }) {
+    next unless $git_url = $self->_url_for_remote($remote);
+    last if $git_url =~ /github\.com/; # Not a Github repository
+    undef $git_url;
+  }
+
+  return unless $git_url;
+
+  $git_url =~ s![\w\-]+\@([^:]+):!http://$1/!;
+  $git_url =~ s!\.git$!!;
+
+  my $home_url = $self->homepage ? $self->homepage->as_string : $git_url;
+
+  return {
+    resources => {
+      homepage   => $home_url,
+      repository => {
+        type => 'git',
+        url  => $git_url,
+        web  => $git_url,
+      },
+    }
+  };
+}
+
+sub _url_for_remote {
+  my ($self, $remote) = @_;
+  my ($url) = `git remote show -n $remote` =~ /URL: (.*)$/m;
+
+  return $url;
 }
 
 sub _under_git {
