@@ -11,6 +11,8 @@ use MooseX::Types::URI qw[Uri];
 use Cwd;
 use IPC::Cmd qw[can_run];
 
+use namespace::autoclean;
+
 has 'homepage' => (
   is => 'ro',
   isa => Uri,
