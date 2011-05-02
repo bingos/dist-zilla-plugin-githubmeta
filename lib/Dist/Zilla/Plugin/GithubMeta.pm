@@ -25,8 +25,29 @@ has 'remote' => (
   default => sub {  [ 'origin' ]  },
 );
 
-sub metadata {
-  my $self = shift;
+has 'issues' => (
+  is  => 'ro',
+  isa => 'Bool',
+  default => 0,
+);
+
+has user => (
+  is  => 'rw',
+  isa => 'Str',
+  predicate => '_has_user',
+);
+
+has repo => (
+  is  => 'rw',
+  isa => 'Str',
+  predicate => '_has_repo',
+);
+
+sub _acquire_repo_info {
+  my ($self) = @_;
+
+  return if $self->_has_user and $self->_has_repo;
+
   return unless _under_git();
   return unless can_run('git');
 
@@ -39,19 +60,39 @@ sub metadata {
 
   return unless $git_url;
 
-  $git_url =~ s![\w\-]+\@([^:]+):!http://$1/!;
-  $git_url =~ s!\.git$!!;
+  my ($user, $repo) = $git_url =~ m{
+    github\.com           # the domain
+    / ([^/]+)             # the username
+    / ([^/]+?) (?:\.git)? # the repo name
+  }ix;
 
-  my $home_url = $self->homepage ? $self->homepage->as_string : $git_url;
+  return unless defined $user and defined $repo;
+
+  $self->_user($user);
+  $self->_repo($repo);
+}
+
+sub metadata {
+  my $self = shift;
+
+  $self->_acquire_repo_info;
+
+  return unless $self->_has_user and $self->_has_repo;
+
+  my $gh_url  = sprintf 'http://github.com/%s/%s', $self->user, $self->repo;
+  my $bug_url = "$gh_url/issues";
+
+  my $home_url = $self->homepage ? $self->homepage->as_string : $gh_url;
 
   return {
     resources => {
       homepage   => $home_url,
       repository => {
         type => 'git',
-        url  => $git_url,
-        web  => $git_url,
+        url  => $gh_url,
+        web  => $gh_url,
       },
+      ($self->issues ? { bugtracker => { web => $bug_url } } : ()),
     }
   };
 }
