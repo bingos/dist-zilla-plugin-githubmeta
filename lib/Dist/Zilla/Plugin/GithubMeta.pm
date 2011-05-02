@@ -31,17 +31,19 @@ has 'issues' => (
   default => 0,
 );
 
-has user => (
+has 'user' => (
   is  => 'rw',
   isa => 'Str',
   predicate => '_has_user',
 );
 
-has repo => (
+has 'repo' => (
   is  => 'rw',
   isa => 'Str',
   predicate => '_has_repo',
 );
+
+sub mvp_multivalue_args { qw(remote) }
 
 sub _acquire_repo_info {
   my ($self) = @_;
@@ -61,15 +63,16 @@ sub _acquire_repo_info {
   return unless $git_url;
 
   my ($user, $repo) = $git_url =~ m{
-    github\.com           # the domain
-    / ([^/]+)             # the username
-    / ([^/]+?) (?:\.git)? # the repo name
+    github\.com              # the domain
+    [:/] ([^/]+)             # the username (: for ssh, / for http)
+    /    ([^/]+?) (?:\.git)? # the repo name
+    $
   }ix;
 
   return unless defined $user and defined $repo;
 
-  $self->_user($user);
-  $self->_repo($repo);
+  $self->user($user) unless $self->_has_user;
+  $self->repo($repo) unless $self->_has_repo;
 }
 
 sub metadata {
@@ -92,7 +95,7 @@ sub metadata {
         url  => $gh_url,
         web  => $gh_url,
       },
-      ($self->issues ? { bugtracker => { web => $bug_url } } : ()),
+      ($self->issues ? (bugtracker => { web => $bug_url }) : ()),
     }
   };
 }
@@ -143,7 +146,7 @@ qq[1 is the loneliest number];
 
   # to override the github remote repo (defaults to 'origin')
   [GithubMeta]
-  remote=github
+  remote = github
 
 =head1 DESCRIPTION
 
