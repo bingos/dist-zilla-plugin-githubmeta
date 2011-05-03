@@ -167,12 +167,30 @@ L<Module::Install::Repository> by Tatsuhiko Miyagawa
 =item C<remote>
 
 The GitHub remote repo can be overriden with this attribute. If not
-provided, it defaults to C<origin>.
+provided, it defaults to C<origin>.  You can provide multiple remotes to
+inspect.  The first one that looks like a GitHub remote is used.
 
 =item C<homepage>
 
-You may override the C<homepage> setting by specifying this attribute. This should be a valid URL as 
-understood by L<MooseX::Types::URI>.
+You may override the C<homepage> setting by specifying this attribute. This
+should be a valid URL as understood by L<MooseX::Types::URI>.
+
+=item C<issues>
+
+If true, a bugtracker URL will be added to the distribution metadata for the
+project's GitHub issues page.
+
+=item C<user>
+
+If given, the C<user> parameter overrides the username found in the GitHub
+repository URL.  This is useful if many people might release from their own
+workstations, but the distribution metadata should always point to one user's
+repo.
+
+=item C<repo>
+
+If give, the C<repo> parameter overrides the repository name found in the
+GitHub repository URL.
 
 =back
 
