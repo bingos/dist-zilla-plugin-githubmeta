@@ -133,6 +133,12 @@ qq[1 is the loneliest number];
 
 =pod
 
+=begin Pod::Coverage
+
+  mvp_multivalue_args
+
+=end Pod::Coverage
+
 =head1 SYNOPSIS
 
   # in dist.ini
