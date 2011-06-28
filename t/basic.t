@@ -1,6 +1,13 @@
 use strict;
 use warnings;
 use Test::More 0.88;
+use IPC::Cmd qw[can_run];
+
+unless ( can_run('git') ) {
+  ok('No git, no dice');
+  done_testing;
+  exit 0;
+}
 
 use lib 't/lib';
 
