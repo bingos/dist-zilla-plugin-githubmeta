@@ -82,7 +82,7 @@ sub metadata {
 
   return unless $self->_has_user and $self->_has_repo;
 
-  my $gh_url  = sprintf 'http://github.com/%s/%s', $self->user, $self->repo;
+  my $gh_url  = sprintf 'https://github.com/%s/%s', $self->user, $self->repo;
   my $bug_url = "$gh_url/issues";
 
   my $home_url = $self->homepage ? $self->homepage->as_string : $gh_url;

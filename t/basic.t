@@ -41,7 +41,7 @@ test_plugin("turn on issues" => {
   plugin => { issues => 1 },
   git    => { origin => 'git@github.com:example/Example-Repo.git' },
   resources => {
-    bugtracker => { web => 'http://github.com/example/Example-Repo/issues' },
+    bugtracker => { web => 'https://github.com/example/Example-Repo/issues' },
   },
 });
 
@@ -104,11 +104,11 @@ sub test_plugin {
       $test->{meta} || ignore(),
       superhashof({
         resources => {
-          homepage   => 'http://github.com/example/Example-Repo',
+          homepage   => 'https://github.com/example/Example-Repo',
           repository => {
             type => 'git',
-            url => 'http://github.com/example/Example-Repo',
-            web => 'http://github.com/example/Example-Repo',
+            url => 'https://github.com/example/Example-Repo',
+            web => 'https://github.com/example/Example-Repo',
           },
           $test->{resources} ? %{ $test->{resources} } : (),
         },
