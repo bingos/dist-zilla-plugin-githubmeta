@@ -19,6 +19,16 @@ test_plugin("simplest case, ssh url" => {
   git    => { origin => 'git@github.com:example/Example-Repo.git' },
 });
 
+test_plugin("https url" => {
+  plugin => { },
+  git    => { origin => 'https://github.com:example/Example-Repo.git' },
+});
+
+test_plugin("SSH url, from a github-keygen user" => {
+  plugin => { },
+  git    => { origin => 'example.github.com:example/Example-Repo.git' },
+});
+
 test_plugin("use a non-default remote" => {
   plugin => { remote => 'github' },
   git    => {
@@ -107,7 +117,7 @@ sub test_plugin {
           homepage   => 'https://github.com/example/Example-Repo',
           repository => {
             type => 'git',
-            url => 'https://github.com/example/Example-Repo',
+            url => 'https://github.com/example/Example-Repo.git',
             web => 'https://github.com/example/Example-Repo',
           },
           $test->{resources} ? %{ $test->{resources} } : (),

@@ -56,7 +56,7 @@ sub _acquire_repo_info {
   my $git_url;
   for my $remote (@{ $self->remote }) {
     next unless $git_url = $self->_url_for_remote($remote);
-    last if $git_url =~ /github\.com/; # Not a Github repository
+    last if $git_url =~ m!\bgithub\.com[:/]!; # Not a Github repository
     undef $git_url;
   }
 
@@ -84,6 +84,7 @@ sub metadata {
 
   my $gh_url  = sprintf 'https://github.com/%s/%s', $self->user, $self->repo;
   my $bug_url = "$gh_url/issues";
+  my $repo_url = "$gh_url.git";
 
   my $home_url = $self->homepage ? $self->homepage->as_string : $gh_url;
 
@@ -92,7 +93,7 @@ sub metadata {
       homepage   => $home_url,
       repository => {
         type => 'git',
-        url  => $gh_url,
+        url  => $repo_url,
         web  => $gh_url,
       },
       ($self->issues ? (bugtracker => { web => $bug_url }) : ()),
@@ -156,7 +157,7 @@ qq[1 is the loneliest number];
 
 =head1 DESCRIPTION
 
-Dist::Zilla::Plugin::GithubMeta is a L<Dist::Zilla> plugin to include GitHub L<http://github.com> meta
+Dist::Zilla::Plugin::GithubMeta is a L<Dist::Zilla> plugin to include GitHub L<https://github.com> meta
 information in C<META.yml>.
 
 It automatically detects if the distribution directory is under C<git> version control and whether the
