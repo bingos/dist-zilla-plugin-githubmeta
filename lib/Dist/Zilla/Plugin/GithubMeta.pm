@@ -9,7 +9,6 @@ with 'Dist::Zilla::Role::MetaProvider';
 
 use MooseX::Types::URI qw[Uri];
 use Cwd;
-use IPC::Cmd qw[can_run];
 
 use namespace::autoclean;
 
@@ -51,7 +50,9 @@ sub _acquire_repo_info {
   return if $self->_has_user and $self->_has_repo;
 
   return unless _under_git();
-  return unless can_run('git');
+
+  require IPC::Cmd;
+  return unless IPC::Cmd::can_run('git');
 
   my $git_url;
   remotelist: for my $remote (@{ $self->remote }) {
