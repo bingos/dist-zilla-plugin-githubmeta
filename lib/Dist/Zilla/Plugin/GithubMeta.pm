@@ -125,7 +125,8 @@ sub metadata {
 
 sub _url_for_remote {
   my ($self, $remote) = @_;
-  my ($url) = `git remote show -n $remote` =~ /URL: (.*)$/m;
+  my $url = `git config --get remote.$remote.url`;
+  chomp $url;
 
   return $url;
 }
