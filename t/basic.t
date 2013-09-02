@@ -9,6 +9,11 @@ unless ( can_run('git') ) {
   exit 0;
 }
 
+{
+  my ($gitver) = `git version`;
+  diag("Using $gitver");
+}
+
 use lib 't/lib';
 
 use Test::Deep qw(all ignore superhashof);
