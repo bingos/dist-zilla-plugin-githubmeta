@@ -11,7 +11,16 @@ unless ( can_run('git') ) {
 
 {
   my ($gitver) = `git version`;
-  diag("Using $gitver");
+  my ($ver) = $gitver =~ m!git version ([0-9.]+)!;
+  chomp $gitver;
+  require version;
+  if ( version->parse( $ver ) < version->parse('1.5.0') ) {
+    diag("$gitver is too low, 1.5.0 or above is required");
+    ok("$gitver is too low, 1.5.0 or above is required");
+    done_testing;
+    exit 0;
+  }
+  diag("Using $gitver\n");
 }
 
 use lib 't/lib';
