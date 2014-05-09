@@ -212,7 +212,7 @@ L<Module::Install::Repository> by Tatsuhiko Miyagawa
 
 =item C<remote>
 
-The GitHub remote repo can be overriden with this attribute. If not
+The GitHub remote repo can be overridden with this attribute. If not
 provided, it defaults to C<origin>.  You can provide multiple remotes to
 inspect.  The first one that looks like a GitHub remote is used.
 
