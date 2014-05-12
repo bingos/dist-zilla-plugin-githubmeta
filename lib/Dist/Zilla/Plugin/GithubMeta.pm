@@ -136,6 +136,7 @@ sub metadata {
 
 sub _url_for_remote {
   my ($self, $remote) = @_;
+  local $ENV{LC_ALL}='C';
   local $ENV{LANG}='C';
   my @remote_info = `git remote show -n $remote`;
   for my $line (@remote_info) {
