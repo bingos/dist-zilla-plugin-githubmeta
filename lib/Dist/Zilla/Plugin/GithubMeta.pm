@@ -136,16 +136,10 @@ sub metadata {
 
 sub _url_for_remote {
   my ($self, $remote) = @_;
-  local $ENV{LC_ALL}='C';
-  local $ENV{LANG}='C';
-  my @remote_info = `git remote show -n $remote`;
-  for my $line (@remote_info) {
-    chomp $line;
-    if ($line =~ /^\s*(?:Fetch)?\s*URL:\s*(.*)/) {
-      return $1;
-    }
-  }
-  return;
+  my $url = `git config --local --get "remote.$remote.url"`;
+  return if $? >> 8;
+  chomp $url;
+  $url
 }
 
 sub _under_git {
