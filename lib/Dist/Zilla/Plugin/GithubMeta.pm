@@ -57,7 +57,8 @@ sub _acquire_repo_info {
 
   {
     my $gitver = `git version`;
-    my ($ver) = $gitver =~ m!git version ([0-9.]+)!;
+    my ($ver) = $gitver =~ m!git version ([0-9.]+(\.msysgit)?[0-9.]+)!;
+    $ver =~ s/\.msysgit//;
     chomp $gitver;
     require version;
     my $ver_obj = try { version->parse( $ver ) }
