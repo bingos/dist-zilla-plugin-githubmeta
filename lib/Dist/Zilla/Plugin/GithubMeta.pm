@@ -9,6 +9,7 @@ with 'Dist::Zilla::Role::MetaProvider';
 
 use MooseX::Types::URI qw[Uri];
 use Cwd;
+use Try::Tiny;
 
 use namespace::autoclean;
 
@@ -59,7 +60,9 @@ sub _acquire_repo_info {
     my ($ver) = $gitver =~ m!git version ([0-9.]+)!;
     chomp $gitver;
     require version;
-    if ( version->parse( $ver ) < version->parse('1.5.0') ) {
+    my $ver_obj = try { version->parse( $ver ) }
+      catch { die "'$gitver' not parsable as '$ver': $_" };
+    if ( $ver_obj < version->parse('1.5.0') ) {
       warn "$gitver is too low, 1.5.0 or above is required\n";
       return;
     }
