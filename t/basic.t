@@ -2,6 +2,7 @@ use strict;
 use warnings;
 use Test::More 0.88;
 use IPC::Cmd qw[can_run];
+use Test::Deep;
 
 unless ( can_run('git') ) {
   ok('No git, no dice');
@@ -109,7 +110,6 @@ sub test_plugin {
     {
       add_files => {
         'source/dist.ini'    => simple_ini(
-          'MetaJSON',
           [ GithubMeta => $test->{plugin} ],
         ),
         'source/.git/config' => git_config_for($test->{git}),
@@ -122,8 +122,8 @@ sub test_plugin {
 
   $tzil->build;
 
-  is_json(
-    $tzil->slurp_file('build/META.json'),
+  cmp_deeply(
+    $tzil->distmeta,
     all(
       $test->{meta} || ignore(),
       superhashof({
