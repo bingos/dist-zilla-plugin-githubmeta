@@ -2,6 +2,7 @@ use strict;
 use warnings;
 use Test::More 0.88;
 use IPC::Cmd qw[can_run];
+use Try::Tiny;
 
 unless ( can_run('git') ) {
   ok('No git, no dice');
@@ -11,10 +12,13 @@ unless ( can_run('git') ) {
 
 {
   my ($gitver) = `git version`;
-  my ($ver) = $gitver =~ m!git version ([0-9.]+)!;
+  my ($ver) = $gitver =~ m!git version ([0-9.]+(\.msysgit)?[0-9.]+)!;
+  $ver =~ s/\.msysgit//;
   chomp $gitver;
   require version;
-  if ( version->parse( $ver ) < version->parse('1.5.0') ) {
+  my $ver_obj = try { version->parse( $ver ) }
+    catch { die "'$gitver' not parsable as '$ver': $_" };
+  if ( $ver_obj < version->parse('1.5.0') ) {
     diag("$gitver is too low, 1.5.0 or above is required");
     ok("$gitver is too low, 1.5.0 or above is required");
     done_testing;
