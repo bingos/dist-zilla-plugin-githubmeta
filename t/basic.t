@@ -3,6 +3,7 @@ use warnings;
 use Test::More 0.88;
 use IPC::Cmd qw[can_run];
 use Try::Tiny;
+use Test::Deep;
 
 unless ( can_run('git') ) {
   ok('No git, no dice');
@@ -126,8 +127,8 @@ sub test_plugin {
 
   $tzil->build;
 
-  is_json(
-    $tzil->slurp_file('build/META.json'),
+  cmp_deeply(
+    $tzil->distmeta,
     all(
       $test->{meta} || ignore(),
       superhashof({
