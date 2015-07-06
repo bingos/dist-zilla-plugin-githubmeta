@@ -16,6 +16,7 @@ unless ( can_run('git') ) {
   my ($ver) = $gitver =~ m!git version ([0-9.]+(\.msysgit)?[0-9.]+)!;
   $ver =~ s![^\d._]!!g;
   $ver =~ s!\.$!!;
+  $ver =~ s!\.+!.!g;
   chomp $gitver;
   require version;
   my $ver_obj = try { version->parse( $ver ) }
