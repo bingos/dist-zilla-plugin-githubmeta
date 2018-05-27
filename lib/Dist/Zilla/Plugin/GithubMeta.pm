@@ -10,6 +10,7 @@ with 'Dist::Zilla::Role::MetaProvider';
 use MooseX::Types::URI qw[Uri];
 use Cwd;
 use Try::Tiny;
+use File::pushd 'pushd';
 
 use namespace::autoclean;
 
@@ -55,6 +56,7 @@ sub _acquire_repo_info {
   require IPC::Cmd;
   return unless IPC::Cmd::can_run('git');
 
+  my $wd = pushd $self->zilla->root;
   {
     my $gitver = `git version`;
     my ($ver) = $gitver =~ m!git version ([0-9.]+(\.msysgit)?[0-9.]+)!;
