@@ -116,7 +116,6 @@ sub test_plugin {
     {
       add_files => {
         'source/dist.ini'    => simple_ini(
-          'MetaJSON',
           [ GithubMeta => $test->{plugin} ],
         ),
         'source/.git/config' => git_config_for($test->{git}),
