@@ -127,6 +127,7 @@ sub test_plugin {
     },
   );
 
+  $tzil->chrome->logger->set_debug(1);
   $tzil->build;
 
   cmp_deeply(
@@ -147,4 +148,7 @@ sub test_plugin {
     ),
     $desc,
   );
+
+  diag 'got log messages: ', explain $tzil->log_messages
+    if not Test::Builder->new->is_passing;
 }
