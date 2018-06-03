@@ -49,6 +49,8 @@ sub mvp_multivalue_args { qw(remote) }
 sub _acquire_repo_info {
   my ($self) = @_;
 
+  my $wd = pushd $self->zilla->root;
+
   return if $self->_has_user and $self->_has_repo;
 
   return unless _under_git();
@@ -56,7 +58,6 @@ sub _acquire_repo_info {
   require IPC::Cmd;
   return unless IPC::Cmd::can_run('git');
 
-  my $wd = pushd $self->zilla->root;
   {
     my $gitver = `git version`;
     my ($ver) = $gitver =~ m!git version ([0-9.]+(\.msysgit)?[0-9.]+)!;
