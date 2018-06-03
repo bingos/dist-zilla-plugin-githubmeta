@@ -4,6 +4,8 @@ package GitSetup;
 
 use Test::More;
 use Path::Tiny;
+use Try::Tiny;
+use IPC::Cmd qw[can_run];
 
 use Exporter 5.57 'import';
 our @EXPORT = qw(no_git_tempdir);

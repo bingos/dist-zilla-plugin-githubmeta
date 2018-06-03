@@ -1,8 +1,6 @@
 use strict;
 use warnings;
 use Test::More 0.88;
-use IPC::Cmd qw[can_run];
-use Try::Tiny;
 use Test::Deep;
 use Test::DZil;
 

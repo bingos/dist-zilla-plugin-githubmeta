@@ -207,7 +207,7 @@ qq[1 is the loneliest number];
 =head1 DESCRIPTION
 
 Dist::Zilla::Plugin::GithubMeta is a L<Dist::Zilla> plugin to include GitHub L<https://github.com> meta
-information in C<META.yml>.
+information in C<META.yml> and C<META.json>.
 
 It automatically detects if the distribution directory is under C<git> version control and whether the
 C<origin> is a GitHub repository and will set the C<repository> and C<homepage> meta in C<META.yml> to the
