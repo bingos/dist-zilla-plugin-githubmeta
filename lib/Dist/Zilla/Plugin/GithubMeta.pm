@@ -245,7 +245,7 @@ repo.
 
 =item C<repo>
 
-If give, the C<repo> parameter overrides the repository name found in the
+If given, the C<repo> parameter overrides the repository name found in the
 GitHub repository URL.
 
 =back
